@@ -1,0 +1,3 @@
+[submodule "txThings"]
+	path = txThings
+	url = https://github.com/mwasilak/txThings
