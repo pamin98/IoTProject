@@ -4,20 +4,18 @@ Created on 20-12-2019
 @author: Panagiotis Minaidis
 '''
 
+from datetime import datetime
+import multiprocessing
+import os
 import sys
-import datetime
 import time
-from multiprocessing import Process, Manager
 
 from twisted.internet import defer
-from twisted.internet.protocol import DatagramProtocol
 from twisted.internet import reactor
-from twisted.python import log
-from datetime import datetime
+from twisted.python   import log
 
-import txthings.resource as resource
 import txthings.coap as coap
-import os
+import txthings.resource as resource
 
 ################################################################################
 # The server consists of 4 running processes:
@@ -241,17 +239,18 @@ def server_queue_model(timestamp_dict, arrivals, avg_exec_dict):
 
 if __name__ == '__main__':
 
-	manager = Manager()
-	results_dictionary = manager.dict()
-	time_dict = manager.dict()
-	arrivals = manager.list()
-	avg_exec_dict = manager.dict()
-	waiting_queue = manager.list()
+	manager = multiprocessing.Manager()
 
-	p = Process(target=server_frontend, args=(results_dictionary, waiting_queue, arrivals, avg_exec_dict))
-	q = Process(target=server_backend, args=(results_dictionary, waiting_queue))
-	r = Process(target=server_benchmark, args=(time_dict,))
-	z = Process(target=server_queue_model, args=(time_dict, arrivals, avg_exec_dict))
+	results_dictionary = manager.dict()
+	time_dict          = manager.dict()
+	arrivals           = manager.list()
+	avg_exec_dict      = manager.dict()
+	waiting_queue      = manager.list()
+
+	p = multiprocessing.Process(target=server_frontend,    args=(results_dictionary, waiting_queue, arrivals, avg_exec_dict))
+	q = multiprocessing.Process(target=server_backend,     args=(results_dictionary, waiting_queue))
+	r = multiprocessing.Process(target=server_benchmark,   args=(time_dict,))
+	z = multiprocessing.Process(target=server_queue_model, args=(time_dict, arrivals, avg_exec_dict))
 
 	p.start()
 	q.start()

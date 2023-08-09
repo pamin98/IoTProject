@@ -4,10 +4,10 @@ Created on 13-01-2020
 @author: Panagiotis Minaidis
 '''
 
-import sys
-import random
 import os
+import random
 import subprocess
+import sys
 import time
 
 ############################################################################

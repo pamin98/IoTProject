@@ -9,9 +9,10 @@ During testing, the following microcomputers were utilized:
 - BeagleBoard-xM     (Client)
 
 # Dependencies
-- twisted>=14.0.0
-- six>=1.10.0
-- gcc (any version)
+- gcc       (any version)
+- ipaddress (any version)
+- twisted   >= 14.0.0
+- six       >= 1.10.0
 
 # Queueing Model
 The server receives requests that arrive at random times and independently from one another (Poisson Point Process), while the time required for servicing each request is also random and independent from every other request. Therefore, the system can be modeled as an M/M/1 queue, where the server receives requests with an exponential delay of mean value equal to 1/λ, and exponential execution latency of mean value 1/μ:

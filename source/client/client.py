@@ -4,20 +4,15 @@ Created on 13-01-2020
 @author: Panagiotis Minaidis
 '''
 
-import sys
-import random
+import ipaddress
 import os
+import random
 
-from twisted.internet.defer import Deferred
-from twisted.internet.protocol import DatagramProtocol
 from twisted.internet import reactor
-from twisted.python import log
+from twisted.python   import log
 
-import txthings.coap as coap
+import txthings.coap     as coap
 import txthings.resource as resource
-
-from ipaddress import ip_address
-
 
 class GetAgent:
     ####################################################################
@@ -51,7 +46,7 @@ class GetAgent:
         request = coap.Message(code=coap.GET, payload=self.pload)
         request.opt.uri_path = (b'serve',)
         request.opt.observe = 0
-        request.remote = (ip_address("192.168.1.185"), coap.COAP_PORT)
+        request.remote = (ipaddress.ip_address("192.168.1.185"), coap.COAP_PORT)
         d = protocol.request(request)
         d.addCallback(self.printResponse)
         d.addErrback(self.noResponse)
@@ -100,7 +95,7 @@ class SubmitAgent():
         request = coap.Message(code=coap.PUT, payload="Input = "+str(ACCELERATED_TIME)+"\n"+payload)
         request.opt.uri_path = (b'serve',)
         request.opt.content_format = coap.media_types_rev['text/plain']
-        request.remote = (ip_address('192.168.1.185'), coap.COAP_PORT)
+        request.remote = (ipaddress.ip_address('192.168.1.185'), coap.COAP_PORT)
         d = protocol.request(request)
         d.addCallback(self.getResponse)
         d.addErrback(self.noResponse)
@@ -140,7 +135,7 @@ class SearchAgent:
         request = coap.Message(code=coap.GET, payload="Status")
         request.opt.uri_path = (b'serve',)
         request.opt.observe = 0
-        request.remote = (ip_address("192.168.1.185"), coap.COAP_PORT)
+        request.remote = (ipaddress.ip_address("192.168.1.185"), coap.COAP_PORT)
         d = protocol.request(request)
         d.addCallback(self.checkResponse)
         d.addErrback(self.noResponse)
